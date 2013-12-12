@@ -16,14 +16,16 @@ using namespace std;
 void levSys(); //Experience table array
 void mainMenu(int,int,int,int,int); //Displays MainMenu
 char menuAns(); //Answer for MainMenu
-void display(int, int); //Displays HP and Mob HP for Battle
-int death(int,int); //If player dies
-int mobChk(int,int); //If mob dies
+void display(int&, int&); //Displays HP and Mob HP for Battle
+int death(int,int&); //If player dies
+int mobChk(int,int&); //If mob dies
 int levUP(int, int); //If player levels up
 int cont(int,int&,int&); //Continue after defeat of a monster
 void retMenu(); //Return to main menu
 char retAns(); //Answer to return for Main Menu
 int calcScor(int&,string&); //Calculate Scores
+void stats(int[],int); //Stat Roll
+void prnStats(int[],int,int); // Print Stats 
 
 
 //Begin execution here
@@ -33,10 +35,12 @@ int main(int argc, char** argv) {
     char choice,choice2, choice3, choice4,choice5, ans; //Choices for options on menus
     int baseHP, baseMP, baseAttk, maxHP=100, //Base stats for classes
         level, exp,// Leveling System
-        bat, goblin, hatchlng, flymon, boss, //Mobs/Monsters
+        bat, goblin, hatchlng, flymon, boss, kill, //Mobs/Monsters
         mobdmg, mobHP, //Battle System
         travel,basGold, gold, gold2, gold3, // Travel System
         score; //Scoring
+    const int SIZE=5;
+    int array[SIZE];
     bool b_done = false; //Exit game
     srand(time(NULL));
             
@@ -51,6 +55,7 @@ int main(int argc, char** argv) {
             "! Let's continue, shall we?" << endl;
     cout << "-----------------" << endl;
     
+    //Class Selection
     do{
     cout << "Please choose a class:" << endl;
     cout << "Enter 1 for Spellcaster!" << endl;
@@ -58,7 +63,7 @@ int main(int argc, char** argv) {
     cout << "Enter 3 for Thief!" << endl;
     cout << "Enter 4 for Archer!" << endl;
     cin >> choice;
-
+    cout << "-----------------" << endl;
     
     switch(choice){
         //Mage Selection
@@ -219,6 +224,7 @@ int main(int argc, char** argv) {
     mobChk(mobHP,baseHP); //Check for Mob death
               }
     exp=5+exp; //Gain experience
+    kill++;
     levUP(exp,level); //Check for level up
     
     cont(choice3,baseHP,maxHP);
@@ -241,6 +247,7 @@ int main(int argc, char** argv) {
     mobChk(mobHP,baseHP); //Check for Mob death
               }
     exp=10+exp; //Gain experience
+    kill++;
     levUP(exp,level); //Check for level up
 
     cont(choice3,baseHP,maxHP);
@@ -263,6 +270,7 @@ int main(int argc, char** argv) {
     mobChk(mobHP,baseHP); //Check for Mob death
               }
     exp=15+exp; //Gain experience
+    kill++;
     levUP(exp,level); //Check for level up
     
     cont(choice3,baseHP,maxHP);
@@ -285,6 +293,7 @@ int main(int argc, char** argv) {
     mobChk(mobHP,baseHP); //Check for Mob death
               }
     exp=25+exp; //Gain experience
+    kill++;
     levUP(exp,level); //Check for level up
 
     retMenu();
@@ -382,8 +391,12 @@ int main(int argc, char** argv) {
         //Scores
         case '4':{
             cout << "Score:" << endl;
-            score=basGold*basGold+exp;
+            score=basGold*basGold+exp+kill;
             calcScor(score,name);
+            cout << "Kills: " << kill << endl;
+            cout << "Gold: " << basGold <<  endl;
+            stats(array,SIZE);
+            prnStats(array,SIZE,5);
             retMenu();
             choice5=retAns();
             break;
@@ -402,13 +415,13 @@ int main(int argc, char** argv) {
 }
 
 //Display HP for both
-void display(int baseHP, int mobHP){
+void display(int& baseHP, int& mobHP){
     cout << "HP: " << baseHP << endl;
     cout << "MonsterHP: " << mobHP << endl;
 }
 
 //If Player dies
-int death(int mobHP, int baseHP){
+int death(int mobHP, int& baseHP){
     if(mobHP > 0 && baseHP < 1){
         cout << "You are now dead " << endl;
         cout << "Game over!" << endl;
@@ -417,7 +430,7 @@ int death(int mobHP, int baseHP){
 }
 
 //If Monster dies
-int mobChk(int mobHP,int baseHP){
+int mobChk(int mobHP,int& baseHP){
     if(mobHP <= 0  && baseHP > 0){
         cout << "You have slayed the monster!" << endl;
     }
@@ -461,15 +474,19 @@ char retAns(){
 }
 //Main Menu Display 
 void mainMenu(int baseHP, int baseAttk, int level, int basGold, int exp ){
-    cout << "What would you like to do?\n";
-    cout << "(1)Travel  (2)Battle" << endl;
-    cout << "(3)Shop    (4)Save and View Scores" << endl;
-    cout << "(5)Exit Game" << endl;
-    cout << "Stats: \n";
-    cout <<  "HP: " << baseHP << "\n"  //HP display
-         << "Attack: " << baseAttk << "\n" // Attack display
-         << "Gold: "<< basGold << "\n"
-         << "Experience: " << exp << endl; //Experience Display
+    cout << "__________________________________" << endl;
+    cout << "|| What would you like to do?   ||\n";
+    cout << "||(1)Travel  ||(2)Battle        ||" << endl;
+    cout << "||(3)Shop    ||(4)View Score    ||" << endl;
+    cout << "||(5)Exit Game                  ||" << endl;
+    cout << "__________________________________" << endl;
+    cout << "________________" << endl;
+    cout << "|Stats:          |\n";
+    cout << "|HP: " << baseHP << "         |\n"  //HP display
+         << "|Attack: " << baseAttk << "      |\n" // Attack display
+         << "|Gold: " << basGold << "       |\n"
+         << "|Experience: " << exp << "   |\n"; //Experience Display
+    cout << "________________"<< endl;
     cout << "Enter a number and press return/enter" << endl;
 }
 //Answer for Main Menu
@@ -489,6 +506,22 @@ int calcScor(int& finScor,string& finName){
     inFile << "Score: " << finName << " " << finScor << endl;
     
     inFile.close();
-    
+}
+
+//Roll for Stats - Still in Testing
+void stats (int a[],int n){
+    cout << "Test Stats" << endl;
+    for (int i=0;i<n;i++){
+        a[i]=rand()%10+2;
+    }
+
+}
+//Print the stats - Still in Testing
+void prnStats(int a[], int n, int print){
+    for (int i=0;i<n;i++){
+        cout << a[i]<<" ";
+        if(i%print==(print-1))
+            cout << endl;
+    }
     
 }
