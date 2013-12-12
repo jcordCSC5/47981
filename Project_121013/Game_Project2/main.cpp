@@ -26,6 +26,7 @@ char retAns(); //Answer to return for Main Menu
 int calcScor(int&,string&); //Calculate Scores
 void stats(int[],int); //Stat Roll
 void prnStats(int[],int,int); // Print Stats 
+void weather(int x=1, int y=2); //Weather
 
 
 //Begin execution here
@@ -397,6 +398,7 @@ int main(int argc, char** argv) {
             cout << "Gold: " << basGold <<  endl;
             stats(array,SIZE);
             prnStats(array,SIZE,5);
+            weather(x,y);
             retMenu();
             choice5=retAns();
             break;
@@ -524,4 +526,20 @@ void prnStats(int a[], int n, int print){
             cout << endl;
     }
     
+}
+
+//Changing the weather - Will Affect Stats in Future Revisions
+void weather(int x, int y){
+    char choice6;
+    
+    cout << "Would you like to change the weather?" << endl;
+    cin >> choice6;
+    
+    if(choice6=='1'){
+        cout << "It's now Sunny!" << endl;
+        
+    }
+    else if(choice6=='2'){
+        cout << "It's now Rainy!" << endl;
+    }
 }
