@@ -398,7 +398,7 @@ int main(int argc, char** argv) {
             cout << "Gold: " << basGold <<  endl;
             stats(array,SIZE);
             prnStats(array,SIZE,5);
-            weather(x,y);
+            //weather(x,y);
             retMenu();
             choice5=retAns();
             break;
@@ -529,7 +529,7 @@ void prnStats(int a[], int n, int print){
 }
 
 //Changing the weather - Will Affect Stats in Future Revisions
-void weather(int x, int y){
+/*void weather(int x, int y){
     char choice6;
     
     cout << "Would you like to change the weather?" << endl;
@@ -543,3 +543,4 @@ void weather(int x, int y){
         cout << "It's now Rainy!" << endl;
     }
 }
+*/
